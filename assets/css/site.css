@@ -22,7 +22,10 @@
   /* texto */
   --tinta:#F5F7FC;
   --tinta-2:#B6C2DA;
-  --tinta-3:#7E8DAB;
+  /* clareado em 24/08/2026: o ladrilho de veio subiu a luminancia do fundo do
+     heroi e derrubou `.marca__sub` (4,28:1) e o `.apagado` do titulo (2,89:1)
+     abaixo do piso da WCAG. O tom anterior era #7E8DAB. */
+  --tinta-3:#8E9CB8;
 
   /* medidas */
   --calha:clamp(20px,5vw,64px);
@@ -73,7 +76,7 @@ section{position:relative;padding-block:clamp(72px,10vw,140px);scroll-margin-top
   letter-spacing:-.035em;
   text-wrap:balance;
 }
-.d1{font-size:clamp(2.6rem,7.2vw,5.6rem)}
+.d1{font-size:clamp(2.6rem,8.4vw,6.6rem)}
 .d2{font-size:clamp(2rem,4.6vw,3.5rem)}
 .d3{font-size:clamp(1.35rem,2.3vw,1.85rem);letter-spacing:-.02em;line-height:1.15}
 
@@ -86,6 +89,7 @@ section{position:relative;padding-block:clamp(72px,10vw,140px);scroll-margin-top
 .olho::before{content:"";width:28px;height:2px;background:var(--ambar);flex:none}
 
 .guia{color:var(--tinta-2);font-size:clamp(1rem,1.35vw,1.15rem);max-width:56ch}
+.hero .guia{font-size:clamp(1.05rem,1.5vw,1.28rem);max-width:52ch}
 .ambar{color:var(--ambar)}
 
 /* --- botoes --------------------------------------------------------------- */
@@ -138,8 +142,18 @@ section{position:relative;padding-block:clamp(72px,10vw,140px);scroll-margin-top
 .topo .env{display:flex;align-items:center;gap:1.5rem}
 
 .marca{display:flex;align-items:center;gap:.7rem;margin-right:auto}
-.marca__mark{width:40px;height:40px;color:var(--ambar);flex:none;transition:transform .6s var(--mola)}
-.marca:hover .marca__mark{transform:rotate(20deg)}
+/* O selo da versao de 24/08/2026 (azul royal, dourado e prata) tem aro
+   metalico claro proprio: ele ja se destaca do cabecalho escuro sem anel
+   postico nem elevacao de brilho. A sombra abaixo e so profundidade. */
+.marca__selo{
+  width:52px;height:auto;flex:none;
+  filter:drop-shadow(0 5px 12px rgba(0,0,0,.6));
+  transition:transform .6s var(--mola),filter .35s;
+}
+.marca:hover .marca__selo{
+  transform:rotate(12deg) scale(1.06);
+  filter:drop-shadow(0 6px 16px rgba(231,169,60,.45));
+}
 .marca__txt{display:flex;flex-direction:column;line-height:1}
 .marca__nome{font-family:var(--display);font-weight:800;font-size:1.02rem;letter-spacing:-.02em}
 .marca__sub{font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;color:var(--tinta-3);margin-top:.28rem}
@@ -177,7 +191,19 @@ section{position:relative;padding-block:clamp(72px,10vw,140px);scroll-margin-top
 
 /* fundo: veio de madeira em turbulencia + brilho que segue o ponteiro */
 .hero__fundo{position:absolute;inset:0;z-index:-2;background:var(--breu)}
-.hero__veio{position:absolute;left:-10%;top:-10%;width:120%;height:120%;opacity:.5;mix-blend-mode:screen;pointer-events:none}
+/* ladrilho, nao filtro SVG: `feTurbulence` e pintado numa superficie de
+   tamanho limitado e devolve VAZIO no resto, em silencio -- e a faixa morta
+   cresce com a janela (medido em 24/08/2026: em 2560px so 3 decis de 10
+   tinham textura). `background-repeat` ladrilha ate onde a tela for.
+   O ladrilho e periodico por construcao; ver `scripts/gera-veio.py`. */
+.hero__veio{
+  position:absolute;inset:0;pointer-events:none;
+  background:url("../img/veio.png") repeat;
+  background-size:768px 768px;
+  opacity:.30;
+  -webkit-mask-image:linear-gradient(180deg,#000 0 62%,transparent 100%);
+  mask-image:linear-gradient(180deg,#000 0 62%,transparent 100%);
+}
 .hero__brilho{
   position:absolute;z-index:-1;width:min(120vw,1100px);aspect-ratio:1;
   left:var(--px,70%);top:var(--py,18%);translate:-50% -50%;
@@ -197,7 +223,15 @@ section{position:relative;padding-block:clamp(72px,10vw,140px);scroll-margin-top
   opacity:.55;
 }
 
-.hero__grade{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(2rem,5vw,4.5rem);align-items:center}
+/* uma coluna: sem a medalha, o peso visual e da tipografia.
+   A medida do titulo e curta de proposito -- linha longa em corpo 6rem vira
+   faixa e perde a forca; o resto do bloco respira mais largo que ele. */
+/* o bloco do heroi e `.env` tambem: encurta-lo com `max-width` o CENTRALIZA
+   (o `.env` traz `margin-inline:auto`) e ele sai do prumo do cabecalho e de
+   todas as secoes abaixo. A medida vai nos filhos, e o `.env` segue mandando
+   na calha. */
+.hero__grade > *{max-width:940px}
+.hero__grade h1{max-width:15ch}
 
 .selo{
   display:inline-flex;align-items:center;gap:.6rem;
@@ -215,19 +249,6 @@ section{position:relative;padding-block:clamp(72px,10vw,140px);scroll-margin-top
 .hero h1 .apagado{color:var(--tinta-3)}
 .hero__acoes{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2.2rem}
 
-/* medalha: o emblema original, que so funciona grande */
-.medalha{position:relative;display:grid;place-items:center;aspect-ratio:1}
-.medalha img{
-  width:100%;max-width:440px;
-  filter:drop-shadow(0 40px 70px rgba(0,0,0,.75)) drop-shadow(0 0 60px rgba(46,107,255,.28));
-  animation:flutua 9s ease-in-out infinite;
-}
-.medalha__anel{
-  position:absolute;width:min(100%,560px);aspect-ratio:1;color:var(--aresta);
-  opacity:.55;animation:gira 64s linear infinite;pointer-events:none;
-}
-@keyframes flutua{0%,100%{transform:translateY(-10px)}50%{transform:translateY(10px)}}
-@keyframes gira{to{transform:rotate(360deg)}}
 
 /* faixa de confianca sob a dobra */
 .confianca{display:flex;flex-wrap:wrap;gap:1.4rem 2.6rem;align-items:center;margin-top:3rem;padding-top:1.8rem;border-top:1px solid var(--aresta)}
@@ -345,17 +366,38 @@ section{position:relative;padding-block:clamp(72px,10vw,140px);scroll-margin-top
 .padrao:hover{transform:translateY(-5px);border-color:var(--ambar)}
 .padrao[hidden]{display:none}
 .padrao__amostra{aspect-ratio:4/3;position:relative;overflow:hidden;background:var(--tom)}
-/* veio: listras finas em angulo, densidade e inclinacao por padrao */
+
+/* Chapa de MDF revestido e LISA: o que ela tem e um decor impresso, de fibra
+   irregular e contraste baixo. A versao anterior desenhava listras de largura
+   e espacamento constantes -- isso nao e chapa, e painel RIPADO, e o olho le
+   sarrafo e fresta. (Apontado pelo CEO em 24/08/2026.)
+   O grao vem de um ladrilho cinza em torno de 128, misturado em `overlay`:
+   o cinza medio nao mexe na cor, so o desvio dele vira claro e escuro -- um
+   arquivo so serve as 18 amostras, em qualquer tom. */
 .padrao__amostra::after{
-  content:"";position:absolute;inset:-30%;
-  background:repeating-linear-gradient(var(--ang,88deg),
-    rgba(0,0,0,var(--veio,.05)) 0 1px,
-    transparent 1px 3px,
-    rgba(255,255,255,calc(var(--veio,.05) * .55)) 3px 4px,
-    transparent 4px 9px);
+  content:"";position:absolute;inset:-15%;z-index:0;
+  background:url("../img/grao.png") repeat;
+  background-size:var(--escala,300px) var(--escala,300px);
+  /* cada amostra entra num ponto diferente do ladrilho, senao as 18 exibem
+     recorte identico e a cartela parece uma cor so repintada */
+  background-position:var(--deslo,0) 0;
+  mix-blend-mode:overlay;
+  opacity:var(--grao,.8);
   transition:transform 1.1s var(--mola);
 }
-.padrao:hover .padrao__amostra::after{transform:scale(1.14)}
+.padrao:hover .padrao__amostra::after{transform:scale(1.1)}
+
+/* RIPADO e outro produto, e por isso tem tratamento proprio: sarrafo largo,
+   fresta escura entre eles e um fio de luz na quina de cada um. */
+.padrao__amostra[data-ripado]::before{
+  content:"";position:absolute;inset:0;z-index:2;
+  background:repeating-linear-gradient(90deg,
+    rgba(0,0,0,.42) 0 3px,
+    rgba(255,255,255,.16) 3px 5px,
+    transparent 5px 26px,
+    rgba(0,0,0,.14) 26px 29px);
+}
+
 .padrao__pe{padding:.85rem 1rem}
 .padrao__nome{font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:-.015em}
 .padrao__marca{font-size:.76rem;color:var(--tinta-3);margin-top:.15rem}
@@ -454,9 +496,7 @@ section{position:relative;padding-block:clamp(72px,10vw,140px);scroll-margin-top
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1000px){
-  .hero__grade,.servico__grade,.orcamento__grade{grid-template-columns:1fr}
-  .medalha{order:-1;max-width:320px;margin-inline:auto}
-  .medalha img{max-width:270px}
+  .servico__grade,.orcamento__grade{grid-template-columns:1fr}
   .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
   .numeros{grid-template-columns:repeat(2,minmax(0,1fr))}
   .rodape__grade{grid-template-columns:1fr 1fr}

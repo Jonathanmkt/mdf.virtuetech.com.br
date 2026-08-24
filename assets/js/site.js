@@ -85,34 +85,38 @@
      Guararapes e conferida no atendimento (esta ressalva esta impressa na pagina).
      `tom` = cor base, `veio` = intensidade da listra, `ang` = inclinacao do veio.
      ====================================================================== */
+  /* `tom` = cor base · `grao` = forca do decor impresso (0 = liso de fabrica)
+     `escala` = tamanho do ladrilho em px, que muda a "especie" da fibra
+     `ripado` = produto diferente, com sarrafo e fresta em vez de decor */
   const PADROES = [
-    { n: 'Carvalho Claro',   f: 'amadeirado', tom: '#C8A171', veio: .09, ang: '88deg' },
-    { n: 'Freijó',           f: 'amadeirado', tom: '#A9793F', veio: .11, ang: '90deg' },
-    { n: 'Tauari',           f: 'amadeirado', tom: '#DCC098', veio: .07, ang: '87deg' },
-    { n: 'Nogal',            f: 'amadeirado', tom: '#7E5233', veio: .13, ang: '91deg' },
-    { n: 'Imbuia',           f: 'amadeirado', tom: '#6B452B', veio: .14, ang: '89deg' },
-    { n: 'Jequitibá',        f: 'amadeirado', tom: '#C79A6E', veio: .10, ang: '92deg' },
-    { n: 'Itapuã',           f: 'amadeirado', tom: '#B8895C', veio: .12, ang: '86deg' },
-    { n: 'Ripado Natural',   f: 'amadeirado', tom: '#CBA57A', veio: .22, ang: '90deg' },
+    { n: 'Carvalho Claro',   f: 'amadeirado', tom: '#C8A171', grao: .7, escala: 320 },
+    { n: 'Freijó',           f: 'amadeirado', tom: '#A9793F', grao: .78, escala: 260 },
+    { n: 'Tauari',           f: 'amadeirado', tom: '#DCC098', grao: .55, escala: 380 },
+    { n: 'Nogal',            f: 'amadeirado', tom: '#7E5233', grao: .8,  escala: 230 },
+    { n: 'Imbuia',           f: 'amadeirado', tom: '#6B452B', grao: .78, escala: 290 },
+    { n: 'Jequitibá',        f: 'amadeirado', tom: '#C79A6E', grao: .62, escala: 420 },
+    { n: 'Itapuã',           f: 'amadeirado', tom: '#B8895C', grao: .68, escala: 340 },
+    { n: 'Ripado Natural',   f: 'amadeirado', tom: '#CBA57A', grao: .6,  escala: 300, ripado: true },
 
-    { n: 'Branco',           f: 'unicolor',   tom: '#F5F4F1', veio: .02, ang: '90deg' },
-    { n: 'Off-White',        f: 'unicolor',   tom: '#EDE8DF', veio: .02, ang: '90deg' },
-    { n: 'Areia',            f: 'unicolor',   tom: '#D9CDBA', veio: .03, ang: '90deg' },
-    { n: 'Cinza Cristal',    f: 'unicolor',   tom: '#BFC2C4', veio: .03, ang: '90deg' },
-    { n: 'Argila',           f: 'unicolor',   tom: '#A99C8E', veio: .03, ang: '90deg' },
+    { n: 'Branco',           f: 'unicolor',   tom: '#F5F4F1', grao: .10, escala: 300 },
+    { n: 'Off-White',        f: 'unicolor',   tom: '#EDE8DF', grao: .12, escala: 300 },
+    { n: 'Areia',            f: 'unicolor',   tom: '#D9CDBA', grao: .16, escala: 300 },
+    { n: 'Cinza Cristal',    f: 'unicolor',   tom: '#BFC2C4', grao: .14, escala: 300 },
+    { n: 'Argila',           f: 'unicolor',   tom: '#A99C8E', grao: .18, escala: 300 },
 
-    { n: 'Grafite',          f: 'escuro',     tom: '#3C4149', veio: .05, ang: '90deg' },
-    { n: 'Preto Absoluto',   f: 'escuro',     tom: '#1C1E22', veio: .05, ang: '90deg' },
-    { n: 'Azul Petróleo',    f: 'escuro',     tom: '#2C4450', veio: .05, ang: '90deg' },
-    { n: 'Verde Musgo',      f: 'escuro',     tom: '#3B4A3A', veio: .05, ang: '90deg' },
-    { n: 'Ébano',            f: 'escuro',     tom: '#2A2119', veio: .16, ang: '89deg' },
+    { n: 'Grafite',          f: 'escuro',     tom: '#3C4149', grao: .22, escala: 300 },
+    { n: 'Preto Absoluto',   f: 'escuro',     tom: '#1C1E22', grao: .18, escala: 300 },
+    { n: 'Azul Petróleo',    f: 'escuro',     tom: '#2C4450', grao: .22, escala: 300 },
+    { n: 'Verde Musgo',      f: 'escuro',     tom: '#3B4A3A', grao: .24, escala: 300 },
+    { n: 'Ébano',            f: 'escuro',     tom: '#2A2119', grao: .7,  escala: 250 },
   ];
 
   const grade = $('#padroes-grade');
   if (grade) {
-    grade.innerHTML = PADROES.map(p => `
+    grade.innerHTML = PADROES.map((p, i) => `
       <article class="padrao" data-familia="${p.f}">
-        <div class="padrao__amostra" style="--tom:${p.tom};--veio:${p.veio};--ang:${p.ang}"></div>
+        <div class="padrao__amostra"${p.ripado ? ' data-ripado' : ''}
+             style="--tom:${p.tom};--grao:${p.grao};--escala:${p.escala}px;--deslo:${i * 137}px"></div>
         <div class="padrao__pe">
           <p class="padrao__nome">${p.n}</p>
           <p class="padrao__marca">${{

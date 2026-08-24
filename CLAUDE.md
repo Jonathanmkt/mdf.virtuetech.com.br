@@ -19,7 +19,10 @@ assets/css/site.css   uma folha só, em ordem: tokens → reset → layout → s
 assets/js/site.js     um IIFE, sem dependência; a página funciona sem ele
 ```
 
-Peso da primeira carga, medido: **190 KB** (fonte 72 · CSS 33 · documento 27 · imagem 47 · JS 9).
+Peso da primeira carga, **medido com `node scripts/mede-peso.js`**: **214 KB**
+(imagem 74 · fonte 72 · CSS 35 · documento 24 · JS 9). Não confira isso por `du -sh assets/`:
+a pasta tem 3 MB e quase nada dela vai para o visitante — o JPEG de origem da logo não é servido,
+o `og.png` só o robô de compartilhamento busca, e o `srcset` escolhe uma variante por largura.
 
 **Sem servidor de aplicação — e isso é decisão, não limitação.** O formulário de orçamento não
 faz POST em lugar nenhum: ele **monta a mensagem e abre o WhatsApp** com o texto pronto. É para
@@ -28,21 +31,36 @@ formulário para manter.
 
 ## As decisões que não são óbvias no código
 
-**A marca vem em duas formas, e cada uma tem um lugar.**
-O JPEG de origem (`assets/fonte/`) traz o xadrez de transparência **chapado em pixel** — não é
-alfa, são pixels cinza 199 e branco. O `scripts/prepara-logo.py` recorta o disco por **geometria**
-(círculo perfeito, centro e raio medidos), nunca por cor: por cor, o antialiasing da borda mistura
-o cinza do xadrez e sobra uma franja clara.
-- **`logo-mr-*.webp/png`** — o selo original. Só funciona **grande**: é escuro, tem relevo e traz
-  "DISTRIBUIDORA" e "RedePRO" em corpo miúdo. Usado no herói e no `og:image`.
-- **`marca-mr.svg`** — a marca **redesenhada em vetor**: coroa de serra + monograma, em
-  `currentColor`. É ela no cabeçalho, no rodapé e no favicon. Existe porque o raster não sobrevive
-  a 32 px nem inverte de cor.
+**A marca é o selo original da loja, e só ele — decisão do CEO em 24/08/2026.**
+A arte em uso é a **segunda versão** que ele gerou naquele dia (azul royal, dourado e prata);
+a primeira era um disco grafite quase preto e foi substituída. O JPEG de origem
+(`assets/fonte/logo-redepro-origem.jpeg`) traz o xadrez de transparência **chapado em pixel** —
+não é alfa, são pixels cinza (~180-205) e branco. O `scripts/prepara-logo.py` o remove, e as duas
+decisões dele não são óbvias:
 
-**A marca é embutida como `<symbol>`, não referenciada como arquivo.** `<use href="arquivo.svg#id">`
-não é resolvido de forma confiável (o Safari não resolve, e falha **em silêncio** — o cabeçalho
-fica sem logo e nada aparece no console). O `scripts/embute-marca.py` injeta o símbolo no
-`index.html` entre `<!--marca:inicio-->` e `<!--marca:fim-->`; **rode-o depois de mexer no SVG.**
+- **O fundo se detecta por cinza-e-claro, não por claridade.** O selo tem dentes de serra
+  prateados e "RedePRO" em branco, tão claros quanto o xadrez; o que os separa é a **cor**.
+- **A máscara é geométrica; a detecção só acha a caixa.** Detecção usada como alfa deixa franja —
+  o antialiasing da borda mistura o cinza do xadrez e sobra um halo. E o recorte é uma **elipse**,
+  não um círculo: este desenho mede 1543×1561, 1,2% fora do redondo, e um círculo cortaria 18 px
+  de um eixo ou deixaria xadrez no outro.
+
+Dele saem o selo do cabeçalho e do rodapé (128 e 512 px), o do `og:image` (512), o
+`apple-touch-icon` e o `favicon.ico`. ⚠️ **O selo não é quadrado** (512×518): quem mexer no
+`width`/`height` do `<img>` tem de manter a proporção, ou ele achata.
+
+⚠️ **Houve uma marca vetorial redesenhada, e ela foi retirada.** O CEO decidiu que só a marca
+original da loja aparece. Ela existia porque a **primeira** versão do selo era escura demais para
+funcionar pequena — problema que a versão atual resolveu no próprio desenho. Junto dela caiu
+também a elevação de brilho que o cabeçalho precisava: o selo novo tem aro metálico claro próprio
+e se destaca do fundo escuro sem retoque, com sombra só para dar profundidade.
+
+**A logo não aparece no herói — decisão do CEO em 24/08/2026.** Ela flutuava numa segunda coluna;
+ele pediu que ficasse só no cabeçalho, pequena. Sem ela o herói virou **uma coluna**, e quem
+carrega a dobra passou a ser a tipografia (o título subiu de 5,6 para 6,6 rem). ⚠️ O bloco do
+herói também é `.env`: encurtá-lo com `max-width` o **centraliza** (o `.env` traz
+`margin-inline:auto`) e ele sai do prumo do cabeçalho e de todas as seções. A medida vai nos
+filhos — `.hero__grade > *` —, nunca no bloco.
 
 **O quadro do mapa está fora da ordem de tabulação, de propósito.** Quadro de outra origem é
 escopo de foco próprio: o Chrome não desenha anel nele, e nem `:focus`, nem `:focus-within`, nem
@@ -50,6 +68,36 @@ escopo de foco próprio: o Chrome não desenha anel nele, e nem `:focus`, nem `:
 deram falso com o `<iframe>` já como `document.activeElement`. Deixá-lo tabulável criava uma
 **parada de teclado invisível**, que é pior do que não ter. O caminho de teclado para o mesmo dado
 é o botão "Traçar rota", logo abaixo.
+
+**A textura do herói é um ladrilho, não `feTurbulence` — e isso foi conserto, não gosto.**
+O Chrome pinta o filtro SVG numa superfície de tamanho limitado e devolve **vazio no resto, em
+silêncio**. Medido em 24/08/2026: a textura cobria ~950 px fixos e a faixa morta **crescia com a
+janela** — em 2560 px só 3 decis de 10 tinham textura. `background-repeat` não tem região de
+filtro: ladrilha até onde a tela for. O `scripts/gera-veio.py` gera o ruído no domínio da
+**frequência** e o traz de volta por FFT inversa, o que o torna periódico por construção — o
+ladrilho fecha sem emenda nas quatro bordas, e o próprio script imprime a prova da costura.
+
+⚠️ **O ladrilho clareia o fundo, e isso mexe no contraste.** Ao entrar, ele derrubou
+`.marca__sub` (4,28:1) e o `.apagado` do título (2,89:1) abaixo do piso da WCAG — nada disso
+aparece no olho, e só a medida no pixel pegou. Foi por isso que `--tinta-3` subiu de `#7E8DAB`
+para `#8E9CB8`. **Mexeu na textura ou em qualquer camada de fundo? Rode o `confere.js` antes de
+achar que só mudou o visual.**
+
+**As amostras da cartela usam grão de madeira, não listras — e isso é regra do produto.**
+Chapa de MDF revestido é **lisa**: o que ela tem é um decor **impresso**, de fibra irregular e
+contraste baixo. A primeira versão desenhava `repeating-linear-gradient` — listras de largura e
+espaçamento constantes —, e isso não é chapa: é **painel ripado**, o olho lê sarrafo e fresta.
+O CEO apontou em 24/08/2026. Hoje o grão vem de `scripts/gera-grao.py`, mesmo método de FFT do
+veio do herói, num ladrilho cinza em torno de 128 misturado em `overlay`: o cinza médio não mexe
+na cor, só o desvio dele vira claro e escuro — **um arquivo serve as 18 amostras em qualquer
+tom**. E o ripado, que é outro produto, ganhou tratamento próprio (`[data-ripado]`), com sarrafo
+largo, fresta escura e fio de luz na quina.
+
+Três coisas que parecem detalhe e não são: a **amplitude** do ladrilho (48, não 74 — em 74 lê
+madeira maciça figurada, não chapa revestida); o `--deslo` por índice, que faz cada amostra entrar
+num ponto diferente do ladrilho (sem ele as 18 exibem o mesmo recorte e a cartela parece uma cor
+repintada); e o `--grao` por padrão, que é **0,10 a 0,18 nos unicolores** — chapa branca de fábrica
+é quase lisa, e dar-lhe veio seria mentir sobre o produto.
 
 **`overflow-x` está em `clip`, no `html` e no `body`.** `hidden` só no `body` não recorta nada: ele
 propaga para a viewport e o próprio `body` volta a `visible`. `clip` recorta sem criar caixa de

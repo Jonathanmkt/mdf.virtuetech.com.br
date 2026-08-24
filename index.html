@@ -22,7 +22,6 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="icon" href="assets/img/favicon.ico" sizes="any">
-<link rel="icon" href="assets/img/marca-mr.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,13 +52,6 @@
 </script>
 </head>
 <body>
-<!--marca:inicio--><svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="marca-mr" viewBox="-110 -110 220 220"><g fill="currentColor" fill-rule="evenodd">
-    <path d="M0.00,-84.00L0.00,-100.00L10.66,-99.43L25.96,-79.89L25.96,-79.89L30.90,-95.11L40.86,-91.27L49.37,-67.96L49.37,-67.96L58.78,-80.90L67.07,-74.17L67.96,-49.37L67.96,-49.37L80.90,-58.78L86.71,-49.82L79.89,-25.96L79.89,-25.96L95.11,-30.90L97.86,-20.59L84.00,0.00L84.00,0.00L100.00,0.00L99.43,10.66L79.89,25.96L79.89,25.96L95.11,30.90L91.27,40.86L67.96,49.37L67.96,49.37L80.90,58.78L74.17,67.07L49.37,67.96L49.37,67.96L58.78,80.90L49.82,86.71L25.96,79.89L25.96,79.89L30.90,95.11L20.59,97.86L0.00,84.00L0.00,84.00L0.00,100.00L-10.66,99.43L-25.96,79.89L-25.96,79.89L-30.90,95.11L-40.86,91.27L-49.37,67.96L-49.37,67.96L-58.78,80.90L-67.07,74.17L-67.96,49.37L-67.96,49.37L-80.90,58.78L-86.71,49.82L-79.89,25.96L-79.89,25.96L-95.11,30.90L-97.86,20.59L-84.00,0.00L-84.00,0.00L-100.00,0.00L-99.43,-10.66L-79.89,-25.96L-79.89,-25.96L-95.11,-30.90L-91.27,-40.86L-67.96,-49.37L-67.96,-49.37L-80.90,-58.78L-74.17,-67.07L-49.37,-67.96L-49.37,-67.96L-58.78,-80.90L-49.82,-86.71L-25.96,-79.89L-25.96,-79.89L-30.90,-95.11L-20.59,-97.86L-0.00,-84.00ZM0,-70.0A70.0,70.0 0 1,0 0,70.0A70.0,70.0 0 1,0 0,-70.0Z"/>
-    <path d="M0,-62.0A62.0,62.0 0 1,0 0,62.0A62.0,62.0 0 1,0 0,-62.0ZM0,-58.0A58.0,58.0 0 1,0 0,58.0A58.0,58.0 0 1,0 0,-58.0Z"/>
-  </g>
-  <text x="0" y="0" fill="currentColor" text-anchor="middle" dominant-baseline="central"
-        font-family="Sora, Archivo, system-ui, sans-serif" font-weight="800"
-        font-size="50" letter-spacing="-2">MR</text></symbol></svg><!--marca:fim-->
 
 <div class="progresso" id="progresso" aria-hidden="true"></div>
 
@@ -69,7 +61,9 @@
 <header class="topo" id="topo">
   <div class="env">
     <a class="marca" href="#" aria-label="MR Distribuidora, início">
-      <svg class="marca__mark" aria-hidden="true"><use href="#marca-mr"></use></svg>
+      <img class="marca__selo" src="assets/img/logo-mr-128.webp"
+           srcset="assets/img/logo-mr-128.webp 128w, assets/img/logo-mr-512.webp 512w"
+           sizes="52px" width="52" height="53" alt="" decoding="async">
       <span class="marca__txt">
         <span class="marca__nome">MR Distribuidora</span>
         <span class="marca__sub">Rede&nbsp;Pró</span>
@@ -97,13 +91,7 @@
 <!-- =====================================================  HERO  ========= -->
 <section class="hero" id="inicio">
   <div class="hero__fundo" aria-hidden="true"></div>
-  <svg class="hero__veio" aria-hidden="true" preserveAspectRatio="none">
-    <filter id="veio">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9 0.012" numOctaves="4" seed="7"/>
-      <feColorMatrix values="0 0 0 0 .09  0 0 0 0 .14  0 0 0 0 .27  0 0 0 .35 0"/>
-    </filter>
-    <rect width="100%" height="100%" filter="url(#veio)"/>
-  </svg>
+  <div class="hero__veio" aria-hidden="true"></div>
   <div class="hero__brilho" id="brilho" aria-hidden="true"></div>
   <div class="hero__brasa" aria-hidden="true"></div>
 
@@ -140,17 +128,6 @@
       </div>
     </div>
 
-    <figure class="medalha">
-      <svg class="medalha__anel" viewBox="0 0 100 100" aria-hidden="true">
-        <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width=".4" stroke-dasharray="1 3"/>
-        <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width=".25"/>
-      </svg>
-      <img src="assets/img/logo-mr-512.webp"
-           srcset="assets/img/logo-mr-512.webp 512w, assets/img/logo-mr-1024.webp 1024w"
-           sizes="(max-width:1000px) 270px, 440px" width="512" height="512"
-           alt="Selo da MR Distribuidora Rede Pró: disco escovado com serra circular e o monograma MR"
-           fetchpriority="high" decoding="async">
-    </figure>
   </div>
 </section>
 
@@ -416,7 +393,9 @@
     <div class="rodape__grade">
       <div>
         <a class="marca" href="#inicio" style="margin-bottom:1.2rem">
-          <svg class="marca__mark" aria-hidden="true"><use href="#marca-mr"></use></svg>
+          <img class="marca__selo" src="assets/img/logo-mr-128.webp"
+           srcset="assets/img/logo-mr-128.webp 128w, assets/img/logo-mr-512.webp 512w"
+           sizes="52px" width="52" height="53" alt="" decoding="async">
           <span class="marca__txt">
             <span class="marca__nome">MR Distribuidora</span>
             <span class="marca__sub">Rede&nbsp;Pró</span>
