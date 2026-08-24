@@ -1,0 +1,488 @@
+/* ==========================================================================
+   MR Distribuidora · RedePRO — folha unica
+   Ordem: tokens · reset · tipografia · layout · componentes · secoes · movimento
+   ========================================================================== */
+
+/* --- tokens --------------------------------------------------------------- */
+:root{
+  /* base: grafite azulado, herdado do disco escovado da marca */
+  --breu:#070B14;
+  --noite:#0B1220;
+  --carvao:#111A2C;
+  --superficie:#16223A;
+  --aresta:#22314F;
+
+  /* azul da casa (o royal do Instagram) e o ambar, unico acento quente */
+  --azul:#2E6BFF;
+  --azul-fundo:#1B49C8;
+  --azul-claro:#7FA6FF;
+  --ambar:#E7A93C;
+  --ambar-claro:#F6CE7C;
+
+  /* texto */
+  --tinta:#F5F7FC;
+  --tinta-2:#B6C2DA;
+  --tinta-3:#7E8DAB;
+
+  /* medidas */
+  --calha:clamp(20px,5vw,64px);
+  --largura:1240px;
+  --raio:18px;
+  --raio-sm:10px;
+
+  /* tipos */
+  --display:"Sora","Archivo",system-ui,-apple-system,sans-serif;
+  --texto:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+
+  /* movimento */
+  --mola:cubic-bezier(.16,1,.3,1);
+  --saida:cubic-bezier(.4,0,.2,1);
+}
+
+/* --- reset ---------------------------------------------------------------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip}
+body{margin:0}
+img,svg,video{display:block;max-width:100%;height:auto}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3,h4,p,figure,blockquote,ul,ol{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--ambar);outline-offset:3px;border-radius:4px}
+
+/* --- pagina --------------------------------------------------------------- */
+body{
+  font-family:var(--texto);
+  background:var(--breu);
+  color:var(--tinta);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:clip;
+}
+
+.env{width:min(100% - var(--calha)*2,var(--largura));margin-inline:auto}
+.env--largo{width:min(100% - var(--calha)*2,1440px);margin-inline:auto}
+
+section{position:relative;padding-block:clamp(72px,10vw,140px);scroll-margin-top:88px}
+
+/* --- tipografia ----------------------------------------------------------- */
+.display{
+  font-family:var(--display);
+  font-weight:800;
+  line-height:.98;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+.d1{font-size:clamp(2.6rem,7.2vw,5.6rem)}
+.d2{font-size:clamp(2rem,4.6vw,3.5rem)}
+.d3{font-size:clamp(1.35rem,2.3vw,1.85rem);letter-spacing:-.02em;line-height:1.15}
+
+.olho{
+  display:inline-flex;align-items:center;gap:.6em;
+  font-family:var(--display);font-size:.75rem;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ambar);
+  margin-bottom:1.15rem;
+}
+.olho::before{content:"";width:28px;height:2px;background:var(--ambar);flex:none}
+
+.guia{color:var(--tinta-2);font-size:clamp(1rem,1.35vw,1.15rem);max-width:56ch}
+.ambar{color:var(--ambar)}
+
+/* --- botoes --------------------------------------------------------------- */
+.btn{
+  --bg:var(--ambar);--fg:#1A1204;
+  position:relative;display:inline-flex;align-items:center;gap:.65rem;
+  padding:1rem 1.6rem;border:0;border-radius:999px;cursor:pointer;
+  font-family:var(--display);font-weight:700;font-size:.98rem;letter-spacing:-.01em;
+  background:var(--bg);color:var(--fg);
+  transition:transform .35s var(--mola),box-shadow .35s var(--mola),background .25s;
+  box-shadow:0 1px 0 rgba(255,255,255,.28) inset,0 10px 30px -12px rgba(231,169,60,.7);
+  overflow:hidden;
+}
+.btn:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 18px 40px -14px rgba(231,169,60,.85)}
+.btn:active{transform:translateY(-1px)}
+.btn svg{width:20px;height:20px;flex:none}
+
+.btn--vazado{
+  --bg:transparent;--fg:var(--tinta);
+  border:1px solid var(--aresta);
+  box-shadow:none;backdrop-filter:blur(8px);
+}
+.btn--vazado:hover{background:var(--superficie);border-color:var(--azul-claro);box-shadow:none}
+
+.btn--zap{--bg:#25D366;--fg:#05240F}
+.btn--zap:hover{box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 18px 40px -14px rgba(37,211,102,.8)}
+
+/* pular para o conteudo: visivel so no foco de teclado */
+.pula{
+  position:fixed;top:12px;left:12px;z-index:99;
+  padding:.75rem 1.15rem;border-radius:999px;
+  background:var(--ambar);color:#1A1204;
+  font-family:var(--display);font-weight:700;font-size:.92rem;
+  transform:translateY(-160%);transition:transform .3s var(--mola);
+}
+.pula:focus-visible{transform:none}
+
+/* --- cabecalho ------------------------------------------------------------ */
+.topo{
+  position:fixed;inset:0 0 auto;z-index:60;
+  padding-block:.85rem;
+  transition:background .4s var(--saida),border-color .4s,padding .4s var(--saida);
+  border-bottom:1px solid transparent;
+}
+.topo[data-fixo]{
+  background:rgba(7,11,20,.82);
+  backdrop-filter:blur(16px) saturate(140%);
+  border-bottom-color:var(--aresta);
+}
+.topo .env{display:flex;align-items:center;gap:1.5rem}
+
+.marca{display:flex;align-items:center;gap:.7rem;margin-right:auto}
+.marca__mark{width:40px;height:40px;color:var(--ambar);flex:none;transition:transform .6s var(--mola)}
+.marca:hover .marca__mark{transform:rotate(20deg)}
+.marca__txt{display:flex;flex-direction:column;line-height:1}
+.marca__nome{font-family:var(--display);font-weight:800;font-size:1.02rem;letter-spacing:-.02em}
+.marca__sub{font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;color:var(--tinta-3);margin-top:.28rem}
+
+.menu{display:flex;gap:.35rem;align-items:center}
+.menu a{
+  padding:.5rem .85rem;border-radius:999px;font-size:.92rem;color:var(--tinta-2);
+  transition:color .2s,background .2s;
+}
+.menu a:hover{color:var(--tinta);background:var(--superficie)}
+.topo .btn{padding:.72rem 1.2rem;font-size:.9rem}
+
+.hamburguer{display:none;background:none;border:1px solid var(--aresta);border-radius:12px;padding:.6rem;cursor:pointer;color:var(--tinta)}
+
+/* --- rodape --------------------------------------------------------------- */
+.rodape{border-top:1px solid var(--aresta);background:var(--noite);padding-block:clamp(56px,7vw,84px) 2rem}
+.rodape__grade{display:grid;gap:3rem;grid-template-columns:1.4fr 1fr 1fr}
+.rodape h4{font-family:var(--display);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tinta-3);margin-bottom:1.1rem}
+.rodape li+li{margin-top:.6rem}
+.rodape a:hover{color:var(--ambar)}
+.rodape__fim{
+  margin-top:3rem;padding-top:1.6rem;border-top:1px solid var(--aresta);
+  display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;
+  font-size:.84rem;color:var(--tinta-3);
+}
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+.hero{
+  min-height:100svh;display:flex;align-items:center;
+  padding-top:clamp(120px,16vh,180px);padding-bottom:clamp(64px,9vh,110px);
+  overflow:hidden;isolation:isolate;
+}
+
+/* fundo: veio de madeira em turbulencia + brilho que segue o ponteiro */
+.hero__fundo{position:absolute;inset:0;z-index:-2;background:var(--breu)}
+.hero__veio{position:absolute;left:-10%;top:-10%;width:120%;height:120%;opacity:.5;mix-blend-mode:screen;pointer-events:none}
+.hero__brilho{
+  position:absolute;z-index:-1;width:min(120vw,1100px);aspect-ratio:1;
+  left:var(--px,70%);top:var(--py,18%);translate:-50% -50%;
+  background:radial-gradient(circle,rgba(46,107,255,.30),rgba(46,107,255,.07) 42%,transparent 68%);
+  filter:blur(24px);pointer-events:none;
+  transition:left 1.1s var(--saida),top 1.1s var(--saida);
+}
+.hero__brasa{
+  position:absolute;z-index:-1;right:-8%;bottom:-18%;width:min(90vw,760px);aspect-ratio:1;
+  background:radial-gradient(circle,rgba(231,169,60,.22),transparent 62%);
+  filter:blur(30px);pointer-events:none;
+}
+/* fio de luz na base, como o topo de uma chapa */
+.hero::after{
+  content:"";position:absolute;inset:auto 0 0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--aresta) 18%,var(--azul-claro) 50%,var(--aresta) 82%,transparent);
+  opacity:.55;
+}
+
+.hero__grade{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(2rem,5vw,4.5rem);align-items:center}
+
+.selo{
+  display:inline-flex;align-items:center;gap:.6rem;
+  padding:.45rem .5rem .45rem .45rem;margin-bottom:1.6rem;
+  border:1px solid var(--aresta);border-radius:999px;background:rgba(22,34,58,.6);
+  font-size:.82rem;color:var(--tinta-2);backdrop-filter:blur(8px);
+}
+.selo b{
+  display:inline-block;padding:.2rem .6rem;border-radius:999px;
+  background:var(--ambar);color:#1A1204;font-weight:700;font-size:.72rem;
+  letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;
+}
+
+.hero h1{margin-bottom:1.5rem}
+.hero h1 .apagado{color:var(--tinta-3)}
+.hero__acoes{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2.2rem}
+
+/* medalha: o emblema original, que so funciona grande */
+.medalha{position:relative;display:grid;place-items:center;aspect-ratio:1}
+.medalha img{
+  width:100%;max-width:440px;
+  filter:drop-shadow(0 40px 70px rgba(0,0,0,.75)) drop-shadow(0 0 60px rgba(46,107,255,.28));
+  animation:flutua 9s ease-in-out infinite;
+}
+.medalha__anel{
+  position:absolute;width:min(100%,560px);aspect-ratio:1;color:var(--aresta);
+  opacity:.55;animation:gira 64s linear infinite;pointer-events:none;
+}
+@keyframes flutua{0%,100%{transform:translateY(-10px)}50%{transform:translateY(10px)}}
+@keyframes gira{to{transform:rotate(360deg)}}
+
+/* faixa de confianca sob a dobra */
+.confianca{display:flex;flex-wrap:wrap;gap:1.4rem 2.6rem;align-items:center;margin-top:3rem;padding-top:1.8rem;border-top:1px solid var(--aresta)}
+.confianca__rot{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-3)}
+.confianca ul{display:flex;flex-wrap:wrap;gap:.6rem}
+.confianca li{
+  padding:.45rem .95rem;border:1px solid var(--aresta);border-radius:999px;
+  font-family:var(--display);font-weight:600;font-size:.9rem;color:var(--tinta-2);
+  transition:border-color .25s,color .25s,transform .35s var(--mola);
+}
+.confianca li:hover{border-color:var(--ambar);color:var(--tinta);transform:translateY(-2px)}
+
+/* ==========================================================================
+   TIRA DE CHAPAS (transicao entre hero e conteudo)
+   ========================================================================== */
+.tira{padding-block:0;border-block:1px solid var(--aresta);background:var(--noite);overflow:hidden}
+.tira__pista{display:flex;gap:0;width:max-content;animation:desliza 42s linear infinite}
+.tira:hover .tira__pista{animation-play-state:paused}
+.tira__item{
+  display:flex;align-items:center;gap:.85rem;padding:1.15rem 2.2rem;
+  border-right:1px solid var(--aresta);white-space:nowrap;
+  font-family:var(--display);font-weight:600;font-size:.95rem;color:var(--tinta-2);
+}
+.tira__item i{width:14px;height:14px;border-radius:3px;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.14) inset}
+@keyframes desliza{to{transform:translateX(-50%)}}
+
+/* ==========================================================================
+   CARTAO / GRADES GENERICAS
+   ========================================================================== */
+.cabeca{max-width:62ch;margin-bottom:clamp(2.5rem,5vw,4rem)}
+.cabeca--centro{margin-inline:auto;text-align:center}
+.cabeca--centro .olho{justify-content:center}
+.cabeca h2{margin-bottom:1.1rem}
+.cabeca--centro .guia{margin-inline:auto}
+
+.grade{display:grid;gap:1.25rem}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+.cartao{
+  position:relative;padding:1.75rem;border-radius:var(--raio);
+  background:var(--carvao);border:1px solid var(--aresta);
+  transition:transform .5s var(--mola),border-color .35s,background .35s;
+  overflow:hidden;isolation:isolate;
+}
+.cartao::before{
+  content:"";position:absolute;inset:0;z-index:-1;opacity:0;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(46,107,255,.16),transparent 68%);
+  transition:opacity .4s;
+}
+.cartao:hover{transform:translateY(-6px);border-color:#31456E}
+.cartao:hover::before{opacity:1}
+.cartao__ico{
+  display:grid;place-items:center;width:52px;height:52px;margin-bottom:1.25rem;
+  border-radius:14px;background:var(--superficie);border:1px solid var(--aresta);color:var(--ambar);
+  transition:color .3s,background .3s,transform .5s var(--mola);
+}
+.cartao:hover .cartao__ico{color:#1A1204;background:var(--ambar);transform:scale(1.06) rotate(-4deg)}
+.cartao__ico svg{width:26px;height:26px}
+.cartao h3{font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.02em;margin-bottom:.55rem}
+.cartao p{color:var(--tinta-2);font-size:.96rem}
+
+/* ==========================================================================
+   CORTE E FITAGEM — o servico que separa distribuidora de deposito
+   ========================================================================== */
+.servico{background:var(--noite);border-block:1px solid var(--aresta)}
+.servico__grade{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(2.5rem,6vw,5rem);align-items:center}
+
+/* pilha de chapas desenhada em CSS — sem imagem, sem peso */
+.pilha{position:relative;aspect-ratio:4/3;display:grid;place-items:center;perspective:1200px}
+.pilha__caixa{position:relative;width:min(100%,460px);height:100%;transform-style:preserve-3d;transform:rotateX(52deg) rotateZ(-32deg)}
+.chapa{
+  position:absolute;left:8%;right:8%;top:38%;height:26px;border-radius:5px;
+  background:linear-gradient(180deg,var(--face) 0 62%,var(--canto) 62% 100%);
+  box-shadow:0 10px 22px -12px rgba(0,0,0,.9);
+  transform:translateZ(calc(var(--i) * 30px));
+  transition:transform .9s var(--mola);
+}
+.pilha:hover .chapa{transform:translateZ(calc(var(--i) * 44px)) translateX(calc(var(--i) * -6px))}
+.pilha__legenda{
+  position:absolute;left:50%;bottom:2%;translate:-50% 0;
+  font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tinta-3);
+}
+
+.passos{counter-reset:passo;margin-top:2.4rem;display:grid;gap:1.1rem}
+.passos li{position:relative;padding-left:3.4rem;color:var(--tinta-2)}
+.passos li::before{
+  counter-increment:passo;content:counter(passo,decimal-leading-zero);
+  position:absolute;left:0;top:-.1rem;
+  font-family:var(--display);font-weight:800;font-size:1.05rem;color:var(--ambar);
+  width:2.4rem;
+}
+.passos b{display:block;color:var(--tinta);font-family:var(--display);font-weight:700;font-size:1.02rem;letter-spacing:-.015em;margin-bottom:.15rem}
+
+/* ==========================================================================
+   CATALOGO DE PADROES
+   ========================================================================== */
+.filtros{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2rem}
+.filtro{
+  padding:.6rem 1.15rem;border-radius:999px;cursor:pointer;
+  background:transparent;border:1px solid var(--aresta);color:var(--tinta-2);
+  font-family:var(--display);font-weight:600;font-size:.9rem;
+  transition:background .25s,color .25s,border-color .25s,transform .3s var(--mola);
+}
+.filtro:hover{transform:translateY(-2px);border-color:var(--azul-claro);color:var(--tinta)}
+.filtro[aria-pressed="true"]{background:var(--ambar);border-color:var(--ambar);color:#1A1204}
+
+.padroes{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem}
+.padrao{
+  border-radius:var(--raio-sm);overflow:hidden;border:1px solid var(--aresta);
+  background:var(--carvao);
+  transition:transform .5s var(--mola),border-color .3s;
+}
+.padrao:hover{transform:translateY(-5px);border-color:var(--ambar)}
+.padrao[hidden]{display:none}
+.padrao__amostra{aspect-ratio:4/3;position:relative;overflow:hidden;background:var(--tom)}
+/* veio: listras finas em angulo, densidade e inclinacao por padrao */
+.padrao__amostra::after{
+  content:"";position:absolute;inset:-30%;
+  background:repeating-linear-gradient(var(--ang,88deg),
+    rgba(0,0,0,var(--veio,.05)) 0 1px,
+    transparent 1px 3px,
+    rgba(255,255,255,calc(var(--veio,.05) * .55)) 3px 4px,
+    transparent 4px 9px);
+  transition:transform 1.1s var(--mola);
+}
+.padrao:hover .padrao__amostra::after{transform:scale(1.14)}
+.padrao__pe{padding:.85rem 1rem}
+.padrao__nome{font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:-.015em}
+.padrao__marca{font-size:.76rem;color:var(--tinta-3);margin-top:.15rem}
+
+.nota{margin-top:1.6rem;font-size:.86rem;color:var(--tinta-3)}
+
+/* ==========================================================================
+   PROMESSAS EM NUMERO
+   ========================================================================== */
+.numeros{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--aresta);border:1px solid var(--aresta);border-radius:var(--raio);overflow:hidden}
+.numero{padding:2.1rem 1.5rem;background:var(--carvao);transition:background .35s}
+.numero:hover{background:var(--superficie)}
+.numero__valor{font-family:var(--display);font-weight:800;font-size:clamp(2rem,3.6vw,2.9rem);letter-spacing:-.04em;color:var(--ambar);line-height:1}
+.numero__rot{margin-top:.6rem;color:var(--tinta-2);font-size:.93rem}
+
+/* ==========================================================================
+   CITACAO
+   ========================================================================== */
+.citacao{text-align:center;position:relative;overflow:hidden}
+.citacao::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:radial-gradient(60% 70% at 50% 0%,rgba(231,169,60,.12),transparent 70%);
+}
+.citacao blockquote{font-family:var(--display);font-weight:700;line-height:1.12;letter-spacing:-.035em;font-size:clamp(1.7rem,4.2vw,3.1rem);max-width:20ch;margin-inline:auto;text-wrap:balance}
+.citacao figcaption{margin-top:1.6rem;color:var(--tinta-3);font-size:.9rem;letter-spacing:.1em;text-transform:uppercase}
+
+/* ==========================================================================
+   ORCAMENTO — monta a mensagem do WhatsApp; site estatico, sem servidor
+   ========================================================================== */
+.orcamento{background:var(--noite);border-block:1px solid var(--aresta)}
+.orcamento__grade{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(2.5rem,6vw,4.5rem);align-items:start}
+.form{padding:clamp(1.5rem,3vw,2.25rem);border:1px solid var(--aresta);border-radius:var(--raio);background:var(--carvao)}
+.campo{margin-bottom:1.15rem}
+.campo label{display:block;font-size:.82rem;font-weight:600;color:var(--tinta-2);margin-bottom:.45rem}
+.campo input,.campo select,.campo textarea{
+  width:100%;padding:.85rem 1rem;border-radius:12px;
+  background:var(--noite);border:1px solid var(--aresta);color:var(--tinta);
+  transition:border-color .2s,background .2s;
+}
+.campo input::placeholder,.campo textarea::placeholder{color:var(--tinta-3)}
+.campo input:focus,.campo select:focus,.campo textarea:focus{border-color:var(--azul);background:var(--breu)}
+.campo textarea{resize:vertical;min-height:110px}
+.campo--par{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form .btn{width:100%;justify-content:center;margin-top:.4rem}
+.form__aviso{margin-top:.9rem;font-size:.8rem;color:var(--tinta-3);text-align:center}
+
+.contatos li{display:flex;gap:1rem;padding:1.2rem 0;border-bottom:1px solid var(--aresta)}
+.contatos li:first-child{padding-top:0}
+.contatos svg{width:22px;height:22px;color:var(--ambar);flex:none;margin-top:.2rem}
+.contatos b{display:block;font-family:var(--display);font-weight:700;font-size:1rem;margin-bottom:.2rem}
+.contatos span{color:var(--tinta-2);font-size:.94rem}
+.mapa{margin-top:1.6rem;border:1px solid var(--aresta);border-radius:var(--raio);overflow:hidden;background:var(--carvao)}
+.mapa iframe{width:100%;height:300px;border:0;display:block}
+.mapa__rota{
+  display:flex;align-items:center;justify-content:center;gap:.6rem;
+  padding:.95rem;border-top:1px solid var(--aresta);
+  font-family:var(--display);font-weight:600;font-size:.95rem;color:var(--ambar);
+  transition:background .25s;
+}
+.mapa__rota:hover{background:var(--superficie)}
+.mapa__rota svg{width:18px;height:18px}
+/* O quadro do mapa esta FORA da ordem de tabulacao (tabindex="-1"), e isso e
+   deliberado. Quadro de outra origem e escopo de foco proprio: o Chrome nao
+   desenha anel nele, e nem `:focus`, nem `:focus-within`, nem `focusin` no
+   documento de fora alcancam o estado -- conferido em 24/08/2026 com Tab real,
+   os tres deram falso com o <iframe> ja como `document.activeElement`. Deixa-lo
+   tabulavel criaria uma parada de teclado invisivel, que e pior do que nao ter.
+   O caminho de teclado para o mesmo dado e o botao "Tracar rota", logo abaixo,
+   que abre o mapa de verdade e tem foco visivel. */
+
+/* ==========================================================================
+   MOVIMENTO — revela no scroll
+   ========================================================================== */
+[data-revela]{opacity:0;transform:translateY(26px);transition:opacity .8s var(--saida),transform .8s var(--mola)}
+[data-revela].vem{opacity:1;transform:none}
+[data-revela][data-atraso="1"]{transition-delay:.09s}
+[data-revela][data-atraso="2"]{transition-delay:.18s}
+[data-revela][data-atraso="3"]{transition-delay:.27s}
+[data-revela][data-atraso="4"]{transition-delay:.36s}
+[data-revela][data-atraso="5"]{transition-delay:.45s}
+
+.progresso{position:fixed;inset:0 auto auto 0;height:2px;width:100%;z-index:70;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--azul),var(--ambar));pointer-events:none}
+
+.zap-flut{
+  position:fixed;right:clamp(14px,3vw,26px);bottom:clamp(14px,3vw,26px);z-index:65;
+  display:grid;place-items:center;width:56px;height:56px;border-radius:50%;
+  background:#25D366;color:#05240F;box-shadow:0 14px 32px -12px rgba(37,211,102,.9);
+  transition:transform .45s var(--mola),opacity .4s;
+  opacity:0;transform:scale(.6);pointer-events:none;
+}
+.zap-flut.vem{opacity:1;transform:none;pointer-events:auto}
+.zap-flut:hover{transform:scale(1.08)}
+.zap-flut svg{width:28px;height:28px}
+
+/* ==========================================================================
+   RESPONSIVO
+   ========================================================================== */
+@media (max-width:1000px){
+  .hero__grade,.servico__grade,.orcamento__grade{grid-template-columns:1fr}
+  .medalha{order:-1;max-width:320px;margin-inline:auto}
+  .medalha img{max-width:270px}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .numeros{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rodape__grade{grid-template-columns:1fr 1fr}
+}
+@media (max-width:820px){
+  .menu{
+    position:fixed;inset:0 0 auto;padding:5.5rem var(--calha) 2rem;
+    flex-direction:column;align-items:stretch;gap:.25rem;
+    background:rgba(7,11,20,.97);backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--aresta);
+    transform:translateY(-102%);transition:transform .5s var(--mola);
+  }
+  .menu[data-aberto]{transform:none}
+  .menu a{padding:.95rem .5rem;font-size:1.05rem;border-bottom:1px solid var(--aresta);border-radius:0}
+  .hamburguer{display:grid;order:3}
+  .topo .btn{display:none}
+  .g3,.g2{grid-template-columns:1fr}
+  .campo--par{grid-template-columns:1fr}
+  .rodape__grade{grid-template-columns:1fr;gap:2.2rem}
+}
+@media (max-width:420px){
+  .g4{grid-template-columns:1fr}
+  .padroes{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  [data-revela]{opacity:1;transform:none}
+}
