@@ -38,6 +38,11 @@ quebrada, rolagem lateral, contraste pelo pixel renderizado, foco visível com T
 `alt`/hierarquia/OG/JSON-LD. Detalhes técnicos e as decisões de design não óbvias estão no
 `CLAUDE.md` deste repositório.
 
+`scripts/mede-peso.js` mede o peso real da primeira carga por tipo de recurso (o que o
+visitante baixa, não o que há na pasta) — é a ferramenta que produziu o número citado no
+`docs/HISTORICO.md`. Recalcule com ele sempre que o número precisar ser conferido de novo,
+nunca reaproveite o valor antigo.
+
 ## Conteúdo
 
 Todo o conteúdo (endereço, telefones, fábricas parceiras, frases de marca) vem do Instagram
