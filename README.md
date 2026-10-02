@@ -36,7 +36,7 @@ node scripts/confere.js
 `confere.js` roda em Chrome real e mede, em 360/414/768/1280/1920px: erro de console, requisição
 quebrada, rolagem lateral, contraste pelo pixel renderizado, foco visível com Tab real,
 `alt`/hierarquia/OG/JSON-LD. Detalhes técnicos e as decisões de design não óbvias estão no
-`CLAUDE.md` deste repositório.
+`AGENTS.md` deste repositório.
 
 `scripts/mede-peso.js` mede o peso real da primeira carga por tipo de recurso (o que o
 visitante baixa, não o que há na pasta) — é a ferramenta que produziu o número citado no
